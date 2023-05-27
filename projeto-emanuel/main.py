@@ -1,7 +1,7 @@
 # -- coding: utf-8 --
-# Author: João Beserra e Alan Targino / joao.beserra@baseservice.io e alan.targino@rpe.tech
-# Data: 02/02/23
-# Description: O Código abaixo tem como finalidade fazer requisições a API do Zabbix e criar um arquivo em JSON contendo todos os dados encontrados.
+# Author:Alan Targino
+# Data: 27/05/23
+# Description: O Código abaixo tem como finalidade fazer requisições a API do Zabbix. Lista todos os hosts e cria um item específico nesse host.
 
 import json # importa o modulo que processa objetos json
 import modules.zabbix as zabbix # Import do Módulo Zabbix que está na pasta modules do projeto corrente
