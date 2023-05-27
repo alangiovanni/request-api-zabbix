@@ -9,12 +9,12 @@ import modules.zabbix as zabbix # Import do Módulo Zabbix que está na pasta mo
 # Declaração de variáveis Globais
 global USER_ZBX
 global PASS_ZBX
-global URL_ZBX
+global PASS_URL
 
 # Definição das variáveis
-USER_ZBX = "USER AQUI"
-PASS_ZBX = "PASS AQUI"
-URL_ZBX = "https://zabbix-hubble.connect.dock.tech/api_jsonrpc.php"
+USER_ZBX = "joao.beserra"
+PASS_ZBX = "VFtj8kK3gAYbiyz"
+PASS_URL = "https://zabbix-hubble.connect.dock.tech/api_jsonrpc.php"
 
 def concatena_list_hosts_zabbix(zapi):
     """Retorna uma list com hostid, IP e Hostname. Ex:
@@ -58,7 +58,13 @@ def percentual_progresso(list, count) -> int:
 def cria_item_check_latency(zapi, ip, host, item_name):
     hostid = host['hostid']
     interfaceid = host['interfaceid']
-    retorno_api_zabbix = zabbix.create_item(zapi, hostid, interfaceid, item_name, "check-latency["+ip+"]")
+    tags = [
+        {
+            'tag': 'Application',
+            'value': 'latency'
+        }
+    ]
+    retorno_api_zabbix = zabbix.create_item(zapi, hostid, interfaceid, item_name, "check-latency["+ip+"]", tags)
 
     # Verifica se teve erro
     if retorno_api_zabbix[0] == 1:
@@ -102,7 +108,7 @@ def main():
     """Start da Mágica"""
     # Autenticação e retorno do Zapi
     print("Autenticando no Zabbix...")
-    zapi = zabbix.autentica(USER_ZBX, PASS_ZBX, URL_ZBX)
+    zapi = zabbix.autentica(USER_ZBX, PASS_ZBX, PASS_URL)
 
     # Lista de Hosts do Zabbix
     print("Consumindo a API do Zabbix para coletar os Hosts configurados...")
