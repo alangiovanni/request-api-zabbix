@@ -77,7 +77,7 @@ def cria_monitoria(list_hosts, zapi):
     progresso = 0 # Variável para medir o progresso do for de hosts (contador)
     percent_old = 0 # Variável para salvar o último valor percentual do progresso.
     for host in list_hosts:
-        print("Criando itens e triggers no host: ", host['host'])
+        print("Criando item de latência no host: ", host['host'])
         # Obtem o percentual progredido
         percent_now = percentual_progresso(list_hosts, progresso)
         # Só printa se o valor atual for maior que o anterior (Evita duplicidades de percentual)
