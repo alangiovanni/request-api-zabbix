@@ -9,12 +9,12 @@ import modules.zabbix as zabbix # Import do Módulo Zabbix que está na pasta mo
 # Declaração de variáveis Globais
 global USER_ZBX
 global PASS_ZBX
-global URL_ZBX
+global PASS_URL
 
 # Definição das variáveis
-USER_ZBX = "USUARIO AQUI"
-PASS_ZBX = "SENHA AQUI"
-URL_ZBX = "URL AQUI"
+USER_ZBX = "joao.beserra"
+PASS_ZBX = "VFtj8kK3gAYbiyz"
+PASS_URL = "https://zabbix-hubble.connect.dock.tech/api_jsonrpc.php"
 
 def concatena_list_hosts_zabbix(zapi):
     """Retorna uma list com hostid, IP e Hostname. Ex:
@@ -35,6 +35,7 @@ def concatena_list_hosts_zabbix(zapi):
                 new_host = {
                     'hostid': hostid,
                     'host': hostname['host'],
+                    'interfaceid': hostip['interfaceid'],
                     'ip': hostip['ip'],
                 }
                 #Adicona um novo host na lista
@@ -54,18 +55,61 @@ def percentual_progresso(list, count) -> int:
     else: 
         return percentual_atual
 
+def cria_item_check_latency(zapi, ip, host, item_name):
+    hostid = host['hostid']
+    interfaceid = host['interfaceid']
+    retorno_api_zabbix = zabbix.create_item(zapi, hostid, interfaceid, item_name, "check-latency["+ip+"]")
+
+    # Verifica se teve erro
+    if retorno_api_zabbix[0] == 1:
+        print(retorno_api_zabbix[1])
+    else:
+        print("Item criado com SUCESSO!")
+
+def cria_monitoria(list_hosts, zapi):
+    # Percorre cada host da lista
+    progresso = 0 # Variável para medir o progresso do for de hosts (contador)
+    percent_old = 0 # Variável para salvar o último valor percentual do progresso.
+    for host in list_hosts:
+        print("Criando itens e triggers no host: ", host['host'])
+        # Obtem o percentual progredido
+        percent_now = percentual_progresso(list_hosts, progresso)
+        # Só printa se o valor atual for maior que o anterior (Evita duplicidades de percentual)
+        if (percent_now > percent_old) or progresso == 0:
+            print("-> Progresso: " + str(percent_now) + "%\n")
+        
+        # Separando os octetos para tratar melhor
+        ip_octetos = host['ip'].split(".")
+
+        # Verifica se é um FW Slave comparando o último octeto
+        if ip_octetos[3] == "250":
+            # Cria o item de latência para checar o Master
+            ip_fw_master = ip_octetos[0] + "." + ip_octetos[1] + "." + ip_octetos[2] + ".251" # Definido o IP do FW Master
+            cria_item_check_latency(zapi, ip_fw_master, host, "Latência do FW Master")
+
+        # Verifica se é um FW Master comparando o último octeto
+        elif ip_octetos[3] == "251":
+            # Cria o item de latência para checar o Slave
+            ip_fw_slave = ip_octetos[0] + "." + ip_octetos[1] + "." + ip_octetos[2] + ".250" # Definido o IP do FW Slave
+            cria_item_check_latency(zapi, ip_fw_slave, host, "Latência do FW Slave")
+            
+        # Incrementa o loop em +1
+        progresso += 1
+        # Salva o valor percentual numa variavel
+        percent_old = percent_now
+
 def main():
     """Start da Mágica"""
     # Autenticação e retorno do Zapi
     print("Autenticando no Zabbix...")
-    zapi = zabbix.autentica(USER_ZBX, PASS_ZBX, URL_ZBX)
+    zapi = zabbix.autentica(USER_ZBX, PASS_ZBX, PASS_URL)
 
     # Lista de Hosts do Zabbix
     print("Consumindo a API do Zabbix para coletar os Hosts configurados...")
     list_concatenada_de_hosts = concatena_list_hosts_zabbix(zapi)
 
-    # Joga na Tela a lista
-    print(list_concatenada_de_hosts)
+    # Cria a monitoria
+    cria_monitoria(list_concatenada_de_hosts, zapi)
 
 # Start da Mágica
 main()
