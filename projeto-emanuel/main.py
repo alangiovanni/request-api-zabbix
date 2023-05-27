@@ -9,10 +9,12 @@ import modules.zabbix as zabbix # Import do Módulo Zabbix que está na pasta mo
 # Declaração de variáveis Globais
 global USER_ZBX
 global PASS_ZBX
+global URL_ZBX
 
 # Definição das variáveis
 USER_ZBX = "USUARIO AQUI"
 PASS_ZBX = "SENHA AQUI"
+URL_ZBX = "URL AQUI"
 
 def concatena_list_hosts_zabbix(zapi):
     """Retorna uma list com hostid, IP e Hostname. Ex:
@@ -56,7 +58,7 @@ def main():
     """Start da Mágica"""
     # Autenticação e retorno do Zapi
     print("Autenticando no Zabbix...")
-    zapi = zabbix.autentica(USER_ZBX, PASS_ZBX)
+    zapi = zabbix.autentica(USER_ZBX, PASS_ZBX, URL_ZBX)
 
     # Lista de Hosts do Zabbix
     print("Consumindo a API do Zabbix para coletar os Hosts configurados...")
