@@ -11,8 +11,8 @@ global USER_ZBX
 global PASS_ZBX
 
 # Definição das variáveis
-USER_ZBX = "joao.beserra"
-PASS_ZBX = "VFtj8kK3gAYbiyz"
+USER_ZBX = "USUARIO AQUI"
+PASS_ZBX = "SENHA AQUI"
 
 def concatena_list_hosts_zabbix(zapi):
     """Retorna uma list com hostid, IP e Hostname. Ex:
