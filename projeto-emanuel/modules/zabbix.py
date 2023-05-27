@@ -5,7 +5,7 @@
 
 from pyzabbix import ZabbixAPI # Módulo de chamada do Zabbix
 
-def autentica(login:str, password:str, url="https://zabbix-hubble.connect.dock.tech/api_jsonrpc.php") -> str:
+def autentica(login:str, password:str, url="") -> str:
     """Autenticação do Zabbix"""
     zapi = ZabbixAPI(url)
     zapi.login(login, password)
