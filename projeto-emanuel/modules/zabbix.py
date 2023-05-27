@@ -22,7 +22,7 @@ def busca_name_hosts(zapi):
     dic_hosts = zapi.host.get(output=["host", "hostids"])
     return dic_hosts
 
-def create_item(zapi, host_id, interface_id, item_name, key_name, item_type=0, value_type=0, delay_item="1m"):
+def create_item(zapi, host_id, interface_id, item_name, key_name, tags_item, item_type=0, value_type=0, delay_item="1m"):
     try:
         zapi.item.create(
             hostid=host_id,
@@ -30,6 +30,7 @@ def create_item(zapi, host_id, interface_id, item_name, key_name, item_type=0, v
             name=item_name,
             key_=key_name,
             type=item_type,
+            tags=tags_item,
             value_type=value_type,
             delay=delay_item
         )
