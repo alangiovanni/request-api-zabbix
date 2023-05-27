@@ -9,12 +9,12 @@ import modules.zabbix as zabbix # Import do Módulo Zabbix que está na pasta mo
 # Declaração de variáveis Globais
 global USER_ZBX
 global PASS_ZBX
-global PASS_URL
+global URL_ZBX
 
 # Definição das variáveis
 USER_ZBX = "USER AQUI"
 PASS_ZBX = "PASS AQUI"
-PASS_URL = "https://zabbix-hubble.connect.dock.tech/api_jsonrpc.php"
+URL_ZBX = "https://zabbix-hubble.connect.dock.tech/api_jsonrpc.php"
 
 def concatena_list_hosts_zabbix(zapi):
     """Retorna uma list com hostid, IP e Hostname. Ex:
@@ -108,7 +108,7 @@ def main():
     """Start da Mágica"""
     # Autenticação e retorno do Zapi
     print("Autenticando no Zabbix...")
-    zapi = zabbix.autentica(USER_ZBX, PASS_ZBX, PASS_URL)
+    zapi = zabbix.autentica(USER_ZBX, PASS_ZBX, URL_ZBX)
 
     # Lista de Hosts do Zabbix
     print("Consumindo a API do Zabbix para coletar os Hosts configurados...")
