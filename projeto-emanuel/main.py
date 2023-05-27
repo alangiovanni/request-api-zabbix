@@ -12,8 +12,8 @@ global PASS_ZBX
 global PASS_URL
 
 # Definição das variáveis
-USER_ZBX = "joao.beserra"
-PASS_ZBX = "VFtj8kK3gAYbiyz"
+USER_ZBX = "USER AQUI"
+PASS_ZBX = "PASS AQUI"
 PASS_URL = "https://zabbix-hubble.connect.dock.tech/api_jsonrpc.php"
 
 def concatena_list_hosts_zabbix(zapi):
